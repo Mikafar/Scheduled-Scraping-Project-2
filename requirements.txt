@@ -1,0 +1,5 @@
+pandas
+selenium
+chromedriver-py
+google-cloud-storage
+webdriver-manager
