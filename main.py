@@ -4,6 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from google.cloud import storage
+from google.oauth2 import service_account
 
 options = Options()
 options.headless = True
@@ -18,6 +19,7 @@ elem.send_keys('Central')
 driver.find_element(By.CSS_SELECTOR, "div > button[type='submit']").click()
 lis = driver.find_elements(By.CSS_SELECTOR,".sr1-listing-content-cell")
 
+# ts = "2022-01-29"
 temp = []
 for li in lis:
     shop_name = li.find_element(By.CLASS_NAME,"title-name").text
@@ -27,7 +29,9 @@ df = pd.DataFrame(temp,columns=['title','address'])
 df.to_csv(f"data-{ts}.csv")
 driver.close()
 
-storage_client = storage.Client()
+key_path = "vital-folder-331713-15f519e71cc2.json"
+credentials = service_account.Credentials.from_service_account_file(key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"])
+storage_client = storage.Client(credentials=credentials)
 bucket = storage_client.bucket("storage_mika_csv")
 blob = bucket.blob(f'data-{ts}.csv')
 blob.upload_from_filename(f'data-{ts}.csv')

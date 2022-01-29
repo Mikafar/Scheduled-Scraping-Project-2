@@ -2,4 +2,5 @@ pandas
 selenium
 chromedriver-py
 google-cloud-storage
+google-auth
 webdriver-manager
